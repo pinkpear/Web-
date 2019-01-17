@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>完全轮播图效果展示</title>
+    <style>
+        @font-face {
+            font-family: 'icomoon';
+            src: url('fonts/icomoon.eot?uc52wp');
+            src: url('fonts/icomoon.eot?uc52wp#iefix') format('embedded-opentype'),
+                url('fonts/icomoon.ttf?uc52wp') format('truetype'),
+                url('fonts/icomoon.woff?uc52wp') format('woff'),
+                url('fonts/icomoon.svg?uc52wp#icomoon') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            vertical-align: top;
+        }
+
+        .clearfix:after {
+            content: "";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        .clearfex {
+            *zoom: 1;
+        }
+
+        .container {
+            width: 960px;
+            margin: 0 auto;
+        }
+
+        .banner {
+            width: 960px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 左右按钮 */
+        #arr-l,
+        #arr-r {
+            font-family: "icomoon";
+            font-size: 50px;
+            display: inline-block;
+            height: 80px;
+            width: 60px;
+            position: absolute;
+            top: 50%;
+            margin-top: -40px;
+            line-height: 80px;
+            text-align: center;
+            background: rgba(255, 255, 255, .4);
+            text-decoration: none;
+            color: #333;
+            display: none;
+            z-index: 1;
+        }
+
+        #arr-l {
+            left: 0;
+        }
+
+        #arr-r {
+            right: 0;
+        }
+
+        /* 小点儿部分 */
+        .banner ol {
+            list-style: none;
+            /* width: 96px; */
+            height: 18px;
+            background: rgba(255, 255, 255, .3);
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            /* margin-left: -48px; */
+            border-radius: 9px;
+
+        }
+
+        .banner ol li {
+            float: left;
+            width: 12px;
+            height: 12px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            margin: 3px 6px;
+            line-height: 18px;
+        }
+
+        .banner ol li.current {
+            background-color: #f1025f;
+        }
+
+        /* 图片区域 */
+        .banner ul {
+            height: 540px;
+            overflow: hidden;
+            
+        }
+
+        .banner ul li {
+            float: left;
+            list-style: none;
+        }
+
+        .banner li img {
+            width: 960px;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="banner clearfix" id="box">
+            <!-- 轮播图上两个左右按钮 -->
+            <a id="arr-l" href="#"></a>
+            <a id="arr-r" href="#"></a>
+            <!-- 下边的小点儿 -->
+            <ol></ol>
+            <!-- 图片 -->
+            <ul class="clearfix">
+                <li><a href="#"><img src="images/9.jpg" alt=""></a></li>
+                <li><a href="#"><img src="images/2.png" alt=""></a></li>
+                <li><a href="#"><img src="images/7.jpg" alt=""></a></li>
+                <li><a href="#"><img src="images/8.jpg" alt=""></a></li>
+                <li><a href="#"><img src="images/1.png" alt=""></a></li>
+                <li><a href="#"><img src="images/4.png" alt=""></a></li>
+
+            </ul>
+        </div>
+    </div>
+
+
+
+    <script>
+        function my$(id) {
+            return document.getElementById(id);
+        }
+
+        // 根据Id获取box
+        var box = my$("box");
+        // 图片自动播放（用定时器自动单击右边按钮）
+        var timeId = setInterval(clickarrr,3000);
+
+        // 鼠标进入box区域左右两个箭头显示，离开不显示
+        box.onmouseover = function () {
+            my$("arr-l").style.display = "block";
+            my$("arr-r").style.display = "block";
+            // 鼠标进入清除定时器
+            clearInterval(timeId);
+        };
+        box.onmouseout = function () {
+            my$("arr-l").style.display = "none";
+            my$("arr-r").style.display = "none";
+            // 鼠标离开设置定时器
+            timeId = setInterval(clickarrr,3000);
+        };
+
+        // 获取存放图片的ul
+        var screen = box.children[3];
+
+        // 获取ul中所有的li
+        var imgList = screen.children;
+
+        // 获取图片宽度
+        var imgWidth = imgList[0].offsetWidth;
+
+        // 获取ol
+        var olObj = box.children[2];
+        
+        // 根据图片的宽度，设置ul宽度
+        screen.style.width = (imgList.length+1)*imgWidth + 'px';
+        // 根据图片的个数设置ol宽度
+        olObj.style.width = (imgList.length*24) + 'px';
+        olObj.style.marginLeft = -(imgList.length*24)/2+ 'px';
+
+        // 存储小按钮的索引值
+        var index = 0;
+
+        // 创建小按钮-----根据ul中的li的个数
+        for(var i = 0; i < imgList.length; i++){
+            // 创建li标签加入到ol中
+            var liItem = document.createElement("li");
+            // 在每个ol的li中添加自定义属性，存储索引值
+            liItem.setAttribute("index",i);
+            olObj.appendChild(liItem);
+        }
+        // 默认第一个小按钮被选中
+        olObj.children[0].className = "current";
+        // 制作无缝衔接关键
+        // 克隆第一张图片到最后
+        screen.appendChild(screen.children[0].cloneNode(true));
+        // 获取ol中所有的li
+        var pointList = olObj.children;
+
+        // 为每个小按钮注册进入事件
+        for(var i = 0; i < pointList.length; i++){
+            pointList[i].onmouseover = function(){
+                // 为鼠标进入的小按钮添加样式
+                for(var j = 0; j < pointList.length; j++){
+                    pointList[j].removeAttribute("class");
+                }
+                this.className = "current";
+                // 获取鼠标进入的索引值
+                index = this.getAttribute("index");
+                // 移动ul
+                animate(screen,-index*imgWidth);
+            }
+        }
+
+        // 点击右边的箭头，切换图片
+        my$("arr-r").onclick = clickarrr;
+        // 将单击右边按钮变为命名函数
+        function clickarrr(e){
+            if(index == imgList.length-1){
+                index = 0;
+                screen.style.marginLeft = index + "px";
+            }
+            index++;
+            animate(screen,-index*imgWidth);
+            if(index == imgList.length - 1){
+                olObj.children[0].className = "current";
+                olObj.children[olObj.children.length-1].removeAttribute("class");
+            }else{
+                for(var i = 0; i < olObj.children.length; i++){
+                    olObj.children[i].removeAttribute("class");
+                }
+                olObj.children[index].className = "current";
+            }
+            return false;
+        };
+
+        // 点击左边的箭头，切换图片
+        my$("arr-l").onclick = function(e){
+            if(index == 0){
+                index = parseInt(olObj.children[olObj.children.length-1].getAttribute("index")) +1;
+                screen.style.marginLeft = -index*imgWidth + "px";
+            }
+            index--;
+            animate(screen,-index*imgWidth);
+            // 设置按钮的颜色
+            for(var i = 0; i < olObj.children.length; i++){
+                olObj.children[i].removeAttribute("class");
+            }
+            olObj.children[index].className = "current";
+            return false;
+        };
+
+        //设置任意的一个元素,移动到指定的目标位置
+        function animate(element, target) {
+            clearInterval(element.timeId);
+            //定时器的id值存储到对象的一个属性中
+            element.timeId = setInterval(function () {
+                //获取元素的当前的位置,数字类型
+                var current = element.offsetLeft;
+                //每次移动的距离
+                var step = 10;
+                step = current < target ? step : -step;
+                //当前移动到位置
+                current += step;
+                if (Math.abs(current - target) > Math.abs(step)) {
+                    element.style.marginLeft = current + "px";
+                } else {
+                    //清理定时器
+                    clearInterval(element.timeId);
+                    //直接到达目标
+                    element.style.marginLeft = target + "px";
+                }
+            }, 10);
+        }
+
+
+
+    </script>
+</body>
+
+</html>
