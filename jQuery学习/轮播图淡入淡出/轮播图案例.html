@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>完全轮播图效果展示</title>
+    <style>
+        @font-face {
+            font-family: 'icomoon';
+            src: url('fonts/icomoon.eot?uc52wp');
+            src: url('fonts/icomoon.eot?uc52wp#iefix') format('embedded-opentype'),
+                url('fonts/icomoon.ttf?uc52wp') format('truetype'),
+                url('fonts/icomoon.woff?uc52wp') format('woff'),
+                url('fonts/icomoon.svg?uc52wp#icomoon') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            vertical-align: top;
+        }
+
+        .clearfix:after {
+            content: "";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        .clearfex {
+            *zoom: 1;
+        }
+
+        .container {
+            width: 960px;
+            margin: 0 auto;
+        }
+
+        .banner {
+            width: 960px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .arr {
+            display: none;
+        }
+
+        /* 左右按钮 */
+        #arr-l,
+        #arr-r {
+            font-family: "icomoon";
+            font-size: 50px;
+            display: inline-block;
+            height: 80px;
+            width: 60px;
+            position: absolute;
+            top: 50%;
+            margin-top: -40px;
+            line-height: 80px;
+            text-align: center;
+            background: rgba(255, 255, 255, .4);
+            text-decoration: none;
+            color: #333;
+            z-index: 1;
+        }
+
+        #arr-l {
+            left: 0;
+        }
+
+        #arr-r {
+            right: 0;
+        }
+
+        /* 小点儿部分 */
+        .banner ol {
+            list-style: none;
+            /* width: 96px; */
+            height: 18px;
+            background: rgba(255, 255, 255, .3);
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            /* margin-left: -48px; */
+            border-radius: 9px;
+            z-index: 1;
+
+        }
+
+        .banner ol li {
+            float: left;
+            width: 12px;
+            height: 12px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            margin: 3px 6px;
+            line-height: 18px;
+        }
+
+        .banner ol li.current {
+            background-color: #f1025f;
+        }
+
+
+        /* 图片区域 */
+        .banner ul {
+            height: 540px;
+
+
+        }
+
+        .banner ul li {
+            position: absolute;
+            list-style: none;
+            display: none;
+        }
+
+        .banner li:first-child {
+            display: block;
+        }
+
+        .banner li img {
+            width: 960px;
+            height: auto;
+        }
+    </style>
+    <script src="../jquery-1.12.2.js"></script>
+    <script>
+        $(function () {
+            // 根据图片的数量添加小点的个数
+            for (var i = 0; i < $(".ulist li").length; i++) {
+                console.log(i);
+                $(".banner ol").append("<li></li>");
+            }
+
+            // 根据小点的数量调整位置
+            var marginLeft = -$(".ulist li").length * 24 / 2 + "px";
+            $(".banner ol").css("marginLeft", marginLeft);
+
+
+            // 鼠标进入banner区域显示箭头
+            $(".banner").mouseenter(function () {
+                $(".arr").show();
+            });
+            $(".banner").mouseleave(function () {
+                $(".arr").hide();
+            });
+
+            // 设置一个变量来保存显示的下标
+            var idx = 0;
+
+            // 默认进入第一个小圆点是被选中的
+            $(".banner ol li").eq(idx).addClass("current");
+
+            // 添加鼠标进入小点的事件
+            $(".banner ol li").mouseover(function () {
+                idx = $(this).index();
+                $(this).addClass("current").siblings("li").removeClass("current");
+                $(".ulist li").eq(idx).fadeIn(1000).siblings("li").fadeOut(1000);
+                return false;
+            });
+            // 鼠标点击左箭头
+            $("#arr-l").click(function () {
+                idx--;
+                if (idx == -1) {
+                    idx = $(".ulist li").length;
+                }
+                // 让idx渐渐的显示，它的兄弟渐渐隐藏
+                $(".ulist li").eq(idx).fadeIn(1000).siblings("li").fadeOut(1000);
+                // 小圆点的类样式也发生变化
+                $(".banner ol li").eq(idx).addClass("current").siblings("li").removeClass("current");
+                return false;
+            });
+            // 鼠标点击右箭头
+            $("#arr-r").click(function () {
+                idx++;
+                if (idx == $(".ulist li").length) {
+                    idx = 0;
+                }
+                // 让count渐渐的显示，它的兄弟渐渐隐藏
+                $(".ulist li").eq(idx).fadeIn(1000).siblings("li").fadeOut(1000);
+                // 小圆点的类样式也发生变化
+                $(".banner ol li").eq(idx).addClass("current").siblings("li").removeClass("current");
+
+                return false;
+            });
+
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="banner clearfix" id="box">
+            <!-- 轮播图上两个左右按钮 -->
+            <div class="arr">
+                <a id="arr-l" href="#"></a>
+                <a id="arr-r" href="#"></a>
+            </div>
+
+            <!-- 下边的小点儿 -->
+            <ol></ol>
+            <!-- 图片 -->
+            <ul class="ulist clearfix">
+                <li><a href="#"><img src="images/9.jpg" alt=""></a></li>
+                <li><a href="#"><img src="images/2.png" alt=""></a></li>
+                <li><a href="#"><img src="images/7.jpg" alt=""></a></li>
+                <li><a href="#"><img src="images/8.jpg" alt=""></a></li>
+                <li><a href="#"><img src="images/1.png" alt=""></a></li>
+                <li><a href="#"><img src="images/4.png" alt=""></a></li>
+            </ul>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
