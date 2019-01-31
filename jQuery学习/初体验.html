@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="jquery-1.12.2.js"></script>
+    <script>
+        $(function(){
+            $("#btn").mouseover(function(){
+                // 设置div中显示的内容
+                $(".dv").show("5");
+            });
+            $("#btn").mouseout(function(){
+                // 设置div中显示的内容
+                $(".dv").hide();
+            });
+        });
+    
+    </script>
+    <style>
+        .dv {
+            width: 300px;
+            height: 200px;
+            background-color: deeppink;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <input type="button" value="显示效果" id="btn">
+    <div class="dv"></div>
+</body>
+</html>

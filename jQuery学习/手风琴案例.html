@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .ll {
+            width: 200px;
+            text-align: center;
+            background-color: deeppink;
+            border: 1px solid #333;
+            list-style: none;
+            cursor: pointer;
+        }
+        .ll div{
+            width: 200px;
+            height: 200px;
+            background-color: #999;
+            display: none;
+        }
+    </style>
+    <script src="jquery-1.12.2.js"></script>
+    <script>
+        $(function(){
+            // 获取span标签，并为它们注册点击事件
+            $(".list").click(function(){
+                // 单击时将它的下一个兄弟节点显示，因为只有一个兄弟所以不用选择
+                // 链式编程
+                $(this).next().show(1000).parent().siblings().children("div").hide(1000);
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <ul class="uu">
+        <li class="ll">
+            <span class="list">第一个标签</span>
+            <div>我是灰色的div</div>
+        </li>
+        <li class="ll">
+            <span class="list">第二个标签</span>
+            <div>我是灰色的div</div>
+        </li>
+        <li class="ll">
+            <span class="list">第三个标签</span>
+            <div>我是灰色的div</div>
+        </li>
+    </ul>
+</body>
+
+</html>
